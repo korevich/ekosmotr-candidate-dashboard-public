@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Экосмотр — shortlist руководителя маркетинга</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #edf1f7;
+      --ink: #171826;
+      --muted: #667085;
+      --line: #d8deea;
+      --accent: #e84d2a;
+      --accent-2: #2457d6;
+      --accent-3: #008fa3;
+      --red: #b9382f;
+      --amber: #b66a00;
+      --shadow: 0 18px 50px rgba(23, 24, 38, .13);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      letter-spacing: 0;
+    }
+    a { color: inherit; }
+    .shell { min-height: 100vh; }
+    .hero {
+      background-color: #171826;
+      background-image: linear-gradient(125deg, #171826 0%, #252b52 48%, #71354b 100%);
+      color: #fff;
+      padding: 28px 28px 34px;
+    }
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(340px, .75fr);
+      gap: 24px;
+      align-items: end;
+    }
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ffd8c8;
+    }
+    h1 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero p {
+      max-width: 820px;
+      margin: 18px 0 0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #eef2ff;
+    }
+    .stat-panel {
+      background: rgba(255,255,255,.94);
+      color: var(--ink);
+      border: 1px solid rgba(255,255,255,.68);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      min-height: 78px;
+      background: #fff;
+    }
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .main {
+      max-width: 1280px;
+      margin: -18px auto 0;
+      padding: 0 28px 48px;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 34px rgba(23,24,38,.09);
+      backdrop-filter: blur(14px);
+    }
+    .tabs, .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button, .link-button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: var(--radius);
+      min-height: 38px;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    button.active { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+    .search {
+      min-width: min(280px, 100%);
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 12px;
+      font: inherit;
+      background: #fff;
+    }
+    .section { display: none; padding-top: 22px; }
+    .section.active { display: block; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin: 8px 0 16px;
+    }
+    h2 { margin: 0; font-size: 25px; letter-spacing: 0; }
+    .hint { margin: 6px 0 0; color: var(--muted); line-height: 1.45; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .candidate {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 32px rgba(23,24,38,.08);
+      overflow: hidden;
+    }
+    .candidate-header {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      padding: 18px;
+      align-items: start;
+      border-bottom: 1px solid var(--line);
+    }
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      overflow: hidden;
+      border: 1px solid rgba(36, 87, 214, .18);
+      flex: 0 0 auto;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .candidate h3 { margin: 0 0 8px; font-size: 20px; line-height: 1.2; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 13px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: #344252;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .score {
+      width: 76px;
+      text-align: right;
+    }
+    .score strong { font-size: 30px; line-height: 1; display: block; }
+    .score span { color: var(--muted); font-size: 12px; }
+    .scorebar {
+      height: 7px;
+      background: #e1e8ef;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .scorebar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width: var(--w); }
+    .candidate-body { padding: 18px; display: grid; gap: 14px; }
+    .two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .panel {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+    .panel h4 { margin: 0 0 8px; font-size: 13px; color: #243240; text-transform: uppercase; }
+    .panel p, .panel li { margin: 0; color: #243240; line-height: 1.48; font-size: 14px; }
+    .panel ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+    .experience-panel {
+      background: #ffffff;
+      border-left: 4px solid var(--accent);
+    }
+    .experience-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .experience-list li {
+      position: relative;
+      padding-left: 18px;
+    }
+    .experience-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .62em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .signals {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .signal {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 7px;
+    }
+    .signal strong { display: block; font-size: 11px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .signal span { font-size: 12px; color: #243240; line-height: 1.2; display: block; }
+    .candidate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 2px;
+    }
+    .ghost { color: var(--accent-2); border-color: #c4d0f5; }
+    .compare {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 32px rgba(23,24,38,.08);
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 980px; }
+    th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 12px; font-size: 14px; vertical-align: top; }
+    th { background: #f0f4f8; color: #334252; font-size: 12px; text-transform: uppercase; }
+    tr:hover td { background: #fbfcfe; }
+    .rank { font-weight: 900; color: var(--accent); }
+    .empty { display: none; padding: 28px; text-align: center; color: #4e5f72; }
+    .svgicon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    @media (max-width: 980px) {
+      .hero-inner, .grid, .two { grid-template-columns: 1fr; }
+      .hero { background: #171826; }
+      .signals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-head { display: block; }
+    }
+    @media print {
+      .toolbar { display: none; }
+      .hero { background: #fff; color: #000; padding: 0; }
+      .hero p, .eyebrow { color: #333; }
+      .main { margin: 0; padding: 0; }
+      .candidate { break-inside: avoid; box-shadow: none; }
+      .section { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></symbol>
+  </svg>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">Экосмотр / Growth Marketing Lead</p>
+          <h1>Обезличенная витрина кандидатов</h1>
+          <p>Публичная версия без фото, возраста, ссылок HH, работодателей и идентифицирующих деталей. Полная версия хранится локально.</p>
+        </div>
+        <div class="stat-panel">
+          <div class="stat"><strong>70</strong><span>полных резюме открыто</span></div>
+          <div class="stat"><strong>65</strong><span>уникальных профилей после дублей</span></div>
+          <div class="stat"><strong>37</strong><span>Новосибирск</span></div>
+          <div class="stat"><strong>33</strong><span>Москва</span></div>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <nav class="toolbar">
+        <div class="tabs">
+          <button class="tab active" data-tab="priority"><svg class="svgicon"><use href="#i-check"></use></svg>Первый круг</button>
+          <button class="tab" data-tab="compare"><svg class="svgicon"><use href="#i-filter"></use></svg>Сравнение</button>
+        </div>
+        <div class="filters">
+          <button class="city active" data-city="all">Все</button>
+          <button class="city" data-city="Новосибирск">НСК</button>
+          <button class="city" data-city="Москва">Москва</button>
+          <input class="search" id="search" placeholder="Поиск: CRM, карты, медицина, AI">
+        </div>
+      </nav>
+      <section class="section active" id="priority">
+        <div class="section-head">
+          <div>
+            <h2>Первый круг контакта</h2>
+            <p class="hint">20 кандидатов, где совпадение не только по title, но и по вашей экономике: физлица, записи, карты, сайт, CRM, ROI и управление операционкой.</p>
+          </div>
+        </div>
+        <div class="grid" id="priorityGrid"></div>
+        <div class="empty" id="priorityEmpty">Нет кандидатов под текущий фильтр.</div>
+      </section>
+      <section class="section" id="compare">
+        <div class="section-head">
+          <div>
+            <h2>Сравнение первого круга</h2>
+            <p class="hint">Быстрый способ увидеть, кого звать на какие вопросы: performance, CRM, карты, AI и риски.</p>
+          </div>
+        </div>
+        <div class="compare"><table id="compareTable"></table></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const DATA = {"generatedAt":"2026-05-12T06:52:14.913Z","stats":{"detailTotal":70,"nsk":37,"msk":33,"unique":65,"duplicates":5,"note":"Публичная обезличенная версия"},"priorityCandidates":[{"id":"p1","rank":1,"city":"Новосибирск","title":"НСК кандидат #1","fitScore":161,"salary":"не указана","freshness":"Обновлено 12.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Сильный управленческий НСК-профиль: медицинский центр “Блеск”, Гигабайт/1С, запуск сайта, отдел маркетинга, отчеты, SEO/SMM/контекст и управление большой операционной командой.","opportunity":"Может быть полезна как руководитель, который умеет связать маркетинг, сайт, сотрудников, подрядчиков и регулярную отчетность в управляемый контур.","risk":"Нужно проверить hands-on глубину по Директу, картам и ROI: профиль сильный управленчески, но часть задач могла быть через команду/подрядчиков.","interview":["Как бы связали сайт, карты, CRM и записи в одну отчетность?","Какие задачи отдали бы помощнику в первые 2 недели?","Как контролировали эффективность каналов в медицине?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 161.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быть полезна как руководитель, который умеет связать маркетинг, сайт, сотрудников, подрядчиков и регулярную отчетность в управляемый контур."],"signals":[{"key":"performance","values":["директ","контекст","performance","лидогенерац"]},{"key":"analytics","values":["метрика","bi","roi","romi"]},{"key":"crm","values":["crm","битрикс","retention","email"]},{"key":"local","values":["карты","авто","клиник","стоматолог"]},{"key":"sites","values":["сайт","посадоч","seo","конверси"]},{"key":"management","values":["руковод","директор","head","cmo"]},{"key":"ai","values":["ai","автоматизац","агент"]}],"risks":["кандидат добавлен во второй круг НСК после открытия полного резюме 12.05.2026"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p2","rank":2,"city":"Новосибирск","title":"НСК кандидат #2","fitScore":155,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Приоритет НСК","why":"Самый сильный профиль по масштабу и системности в Новосибирске: медицина/фарма/ecom, CRM, Bitrix, аналитика, карты, управление командой и подрядчиками.","opportunity":"Может быстро построить управляемую маркетинговую систему: связать сайт, CRM, отчеты, карты и performance в один контур роста записей.","risk":"Зарплата не указана; важно проверить, готов ли к hands-on роли, а не только к директорскому уровню.","interview":["Какие данные нужны в CRM, чтобы видеть расход → запись → доезд?","Что бы сделал в первые 30 дней с картами, сайтом и Директом?","Какие задачи отдал бы помощнику?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 155.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быстро построить управляемую маркетинговую систему: связать сайт, CRM, отчеты, карты и performance в один контур роста записей."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","romi"]},{"key":"analytics","values":["сквозн","метрика","analytics","дашборд"]},{"key":"crm","values":["crm","bitrix","email","ltv"]},{"key":"local","values":["карты","авто","медиц","сервис"]},{"key":"sites","values":["сайт","seo","конверси","bitrix"]},{"key":"management","values":["руковод","директор","head","команд"]},{"key":"ai","values":["ai","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p3","rank":3,"city":"Москва","title":"МСК кандидат #3","fitScore":155,"salary":"180 000 ₽","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Медицина + performance","why":"Медицинский B2C/performance профиль: клиники, Roistat, CRM-маркетинг, retention, email, посадочные, бюджеты до 5 млн руб. в месяц, AI-сигналы.","opportunity":"Хороший benchmark по медицине: похожая запись на услугу, локальный спрос, возврат пациентов, CRM-цепочки.","risk":"Опыт 3 года 3 месяца; нужно проверить управленческую зрелость.","interview":["Какие кампании дали лучшие заявки в клинике?","Как использовал Roistat и CRM для контроля качества?","Какая операционка была автоматизирована?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 155.","Город: Москва; зарплатное ожидание: 180 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Хороший benchmark по медицине: похожая запись на услугу, локальный спрос, возврат пациентов, CRM-цепочки."],"signals":[{"key":"performance","values":["директ","контекст","performance","лидогенерац"]},{"key":"analytics","values":["roistat","сквозн","analytics","отчет"]},{"key":"crm","values":["crm","retention","email","ltv"]},{"key":"local","values":["локальн","авто","клиник","медиц"]},{"key":"sites","values":["сайт","посадоч","конверси","tilda"]},{"key":"management","values":["руковод","команд","подрядчик","отдел"]},{"key":"ai","values":["ai","автоматизац","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p4","rank":4,"city":"Москва","title":"МСК кандидат #4","fitScore":150,"salary":"250 000 ₽","freshness":"Обновлено 12.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Новый / медицина + AI","why":"Очень сильный профиль для медицинской услуги: клиника, Яндекс Директ, VK, Telegram, SEO, лендинги, CRM, Calltouch, Яндекс.Метрика, ROMI/ROI/CAC/LTV, AI-инструменты.","opportunity":"Может дать Экосмотру зрелую модель performance + продуктовая упаковка услуги + сквозная аналитика + AI-автоматизация контента и рутины.","risk":"Ожидания 250 000 руб. выше вилки 150–180 тыс.; стоит рассматривать как дорогой benchmark или кандидата на переговоры, если готов снижаться.","interview":["Готов ли к вилке 150–180 тыс. или нужен другой формат?","Как строил Calltouch/CRM/Метрику до ROMI и LTV?","Какие AI-агенты можно внедрить в Экосмотр за 30 дней?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 150.","Город: Москва; зарплатное ожидание: 250 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может дать Экосмотру зрелую модель performance + продуктовая упаковка услуги + сквозная аналитика + AI-автоматизация контента и рутины."],"signals":[{"key":"performance","values":["директ","контекст","performance","лидогенерац"]},{"key":"analytics","values":["сквозн","метрика","analytics","отчет"]},{"key":"crm","values":["crm","ltv","воронк"]},{"key":"local","values":["карты","2гис","филиал","локальн"]},{"key":"sites","values":["сайт","лендинг","seo","конверси"]},{"key":"management","values":["руковод","директор","head","cmo"]},{"key":"ai","values":["нейросет","ai","автоматизац"]}],"risks":["зарплатные ожидания выше вилки 150–180 тыс."],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p5","rank":5,"city":"Москва","title":"МСК кандидат #5","fitScore":148,"salary":"150 000 ₽","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Авто + доезд","why":"Очень близкая механика к Экосмотру: авто, сеть автосалонов, лиды, квал-лиды, приезд, продажа, AMO CRM, 2ГИС, Яндекс Бизнес, Roistat.","opportunity":"Может принести практики контроля качества лидов, звонков, заявок и доезда из автомобильного сегмента.","risk":"Нужно проверить, потянет ли роль руководителя системы, а не только сильного performance-исполнителя.","interview":["Как контролировал путь лид → приезд → продажа?","Что делал с 2ГИС/Яндекс Бизнес?","Как управлял подрядчиками и помощниками?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 148.","Город: Москва; зарплатное ожидание: 150 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может принести практики контроля качества лидов, звонков, заявок и доезда из автомобильного сегмента."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","performance"]},{"key":"analytics","values":["roistat","сквозн","метрика","analytics"]},{"key":"crm","values":["crm","bitrix","amo"]},{"key":"local","values":["2гис","яндекс бизнес","авто","сервис"]},{"key":"sites","values":["сайт","лендинг","посадоч","seo"]},{"key":"management","values":["команд","подрядчик","отдел","бюджет"]},{"key":"ai","values":["ai","автоматизац","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p6","rank":6,"city":"Москва","title":"МСК кандидат #6","fitScore":148,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Система + аналитика","why":"Директорский growth-профиль: ROMI, P&L, unit-экономика, web-аналитика, оцифровка воронки, CRM, LTV, спецпроекты.","opportunity":"Может построить верхнеуровневую систему управления маркетингом и метриками.","risk":"Может быть более стратегическим и дорогим, чем нужно для hands-on ежедневного роста.","interview":["Как запускал аналитическую службу с нуля?","Как связывал P&L, ROMI и воронку?","Готов ли сам руками разбирать источники и CRM?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 148.","Город: Москва; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может построить верхнеуровневую систему управления маркетингом и метриками."],"signals":[{"key":"performance","values":["директ","контекст","romi","таргет"]},{"key":"analytics","values":["дашборд","отчет","gtm","unit"]},{"key":"crm","values":["crm","ltv","воронк"]},{"key":"local","values":["отзыв","авто","медиц","сервис"]},{"key":"sites","values":["сайт","лендинг","конверси","ux"]},{"key":"management","values":["руковод","директор","cmo","подрядчик"]},{"key":"ai","values":["ai","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p7","rank":7,"city":"Новосибирск","title":"НСК кандидат #7","fitScore":147,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Приоритет НСК","why":"Hands-on growth-профиль: заявки, CPL, Авито, гео, отзывы, SEO, CRM, сквозная аналитика, подрядчики и AI/автоматизация.","opportunity":"Хорош для быстрого прироста заявок физлиц и дисциплины гипотез: дешевые лиды, локальные каналы, посадочные, контроль источников.","risk":"Есть несколько похожих резюме с Биопорт; нужно убедиться, что выбран основной профиль и масштаб ответственности достаточный.","interview":["Как был получен рост заявок в 10 раз?","Как считал CPL и стоимость продажи?","Какие AI-автоматизации реально использовал?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 147.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Хорош для быстрого прироста заявок физлиц и дисциплины гипотез: дешевые лиды, локальные каналы, посадочные, контроль источников."],"signals":[{"key":"performance","values":["директ","яндекс директ","лидогенерац","cpl"]},{"key":"analytics","values":["сквозн","метрика","analytics","bi"]},{"key":"crm","values":["crm","воронк"]},{"key":"local","values":["гео","отзыв","авито","авто"]},{"key":"sites","values":["сайт","seo","конверси","tilda"]},{"key":"management","values":["команд","подрядчик","отдел","бюджет"]},{"key":"ai","values":["нейросет","ai","автоматизац"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p8","rank":8,"city":"Москва","title":"МСК кандидат #8","fitScore":144,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"AI + growth","why":"Growth/performance с бюджетами $20–80k в месяц, CPL/CPA/ROI/ROMI, сквозная аналитика, CRM/retention/email и GenAI для креативов/лидов.","opportunity":"Сильный кандидат для AI-агентов, автоматизации мониторинга, креативов и операционной аналитики.","risk":"Может быть менее локально привязан к РФ/офлайн-сервисам и выше по ожиданиям.","interview":["Какие GenAI-процессы реально работали?","Как контролировал ROI/ROMI на больших бюджетах?","Как адаптировал бы это к картам и станциям ТО?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 144.","Город: Москва; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Сильный кандидат для AI-агентов, автоматизации мониторинга, креативов и операционной аналитики."],"signals":[{"key":"performance","values":["директ","performance","cpa","cpl"]},{"key":"analytics","values":["сквозн","метрика","analytics","дашборд"]},{"key":"crm","values":["crm","retention","email","воронк"]},{"key":"local","values":["локальн","гео","авто"]},{"key":"sites","values":["сайт","seo","конверси"]},{"key":"management","values":["руковод","head","lead","команд"]},{"key":"ai","values":["chatgpt","gpt","ai","автоматизац"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p9","rank":9,"city":"Новосибирск","title":"НСК кандидат #9","fitScore":139,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"A: звать в первую очередь","why":"Сильный профиль по полному резюме: есть релевантные сигналы для growth/performance и аналитики.","opportunity":"Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами.","risk":"Существенных рисков по резюме не видно","interview":["Попросить описать систему аналитики","Проверить опыт управления помощником/подрядчиками","Уточнить зарплатные ожидания"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 139.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами."],"signals":[{"key":"performance","values":["директ","контекст","лидогенерац","cac"]},{"key":"analytics","values":["сквозн","дашборд"]},{"key":"crm","values":["crm","битрикс","retention","ltv"]},{"key":"local","values":["карты","2гис","филиал","авито"]},{"key":"sites","values":["сайт","seo","конверси"]},{"key":"management","values":["руковод","директор","head","cmo"]},{"key":"ai","values":["автоматизац","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p10","rank":10,"city":"Москва","title":"МСК кандидат #10","fitScore":136,"salary":"150 000 ₽","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Карты + автосервис","why":"Автосервисы/детейлинг, геосервисы, отзывы, CRM, повторные продажи, 2ГИС, карты, сайт, SEO. Зарплата 150 000 руб. в вилке.","opportunity":"Прямо применим к росту заявок с карт и допродажам смежных продуктов.","risk":"Масштаб меньше федеральной сети; нужно проверить, сможет ли масштабировать систему.","interview":["Что конкретно дало +110% обращений с геосервисов?","Как строил повторные продажи?","Как бы масштабировал это на сеть станций?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 136.","Город: Москва; зарплатное ожидание: 150 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Прямо применим к росту заявок с карт и допродажам смежных продуктов."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","performance"]},{"key":"analytics","values":["сквозн","roi"]},{"key":"crm","values":["crm","битрикс","ltv","воронк"]},{"key":"local","values":["карты","2гис","филиал","гео"]},{"key":"sites","values":["сайт","seo"]},{"key":"management","values":["руковод","директор","команд","подрядчик"]},{"key":"ai","values":["агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p11","rank":11,"city":"Новосибирск","title":"НСК кандидат #11","fitScore":136,"salary":"не указана","freshness":"Обновлено 07.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"A: звать в первую очередь","why":"Сильный профиль по полному резюме: есть релевантные сигналы для growth/performance и аналитики.","opportunity":"Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами.","risk":"Существенных рисков по резюме не видно","interview":["Попросить описать систему аналитики","Проверить опыт управления помощником/подрядчиками","Уточнить зарплатные ожидания"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 136.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","performance"]},{"key":"analytics","values":["roistat","сквозн","метрика","analytics"]},{"key":"crm","values":["crm","битрикс","amo","email"]},{"key":"local","values":["гео","авто"]},{"key":"sites","values":["сайт","лендинг","конверси","wordpress"]},{"key":"management","values":["команд","подрядчик","бюджет","управл"]},{"key":"ai","values":["ai","автоматизац"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p12","rank":12,"city":"Москва","title":"МСК кандидат #12","fitScore":136,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"A: звать в первую очередь","why":"Сильный профиль по полному резюме: есть релевантные сигналы для growth/performance и аналитики.","opportunity":"Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами.","risk":"нет явного AI-сигнала","interview":["Попросить описать систему аналитики","Проверить опыт управления помощником/подрядчиками","Уточнить зарплатные ожидания"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 136.","Город: Москва; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может закрыть часть задач по привлечению, аналитике, CRM и управлению каналами."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","performance"]},{"key":"analytics","values":["метрика","analytics","дашборд","bi"]},{"key":"crm","values":["crm","битрикс","amo"]},{"key":"local","values":["карты","2gis","гео","авито"]},{"key":"sites","values":["сайт","seo"]},{"key":"management","values":["руковод","head","lead","команд"]}],"risks":["нет явного AI-сигнала"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p13","rank":13,"city":"Новосибирск","title":"НСК кандидат #13","fitScore":135,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Директор по маркетингу локальной сети компания: 12 ресторанов, CAC/LTV/ROAS/ROMI, системность, отчетность и рост выручки.","opportunity":"Может перенести логику локального B2C на станции: районный спрос, акции, повторные касания, контроль каналов и экономика привлечения.","risk":"Опыт больше общепит/сеть, а не авто/медицина; нужно проверить работу с картами, сайтом и рекламными кабинетами руками.","interview":["Как считали CAC/LTV/ROAS/ROMI в Papa Johns?","Какие локальные каналы давали лучший результат?","Что бы сделали с картами и сайтом Экосмотра в первые 30 дней?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 135.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может перенести логику локального B2C на станции: районный спрос, акции, повторные касания, контроль каналов и экономика привлечения."],"signals":[{"key":"performance","values":["директ","контекст","лидогенерац","romi"]},{"key":"analytics","values":["сквозн","метрика","bi","отчет"]},{"key":"crm","values":["ltv"]},{"key":"local","values":["филиал","локальн","отзыв","сервис"]},{"key":"sites","values":["сайт","seo"]},{"key":"management","values":["руковод","директор","команд","подрядчик"]},{"key":"ai","values":["ai","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p14","rank":14,"city":"Москва","title":"МСК кандидат #14","fitScore":134,"salary":"150 000 ₽","freshness":"Обновлено 11.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Новый / авто + ROI","why":"Свежий московский кандидат с очень прикладным опытом: авто, автосервис, сайты, SEO, Директ, таргет, SERM, Roistat и Bitrix24. Зарплатное ожидание 150 000 руб. попадает в вилку.","opportunity":"Может усилить контур “сайт + карты/репутация + CRM + отчеты” и быстро дать порядок по источникам, заявкам, звонкам и эффективности каналов.","risk":"Не готов к командировкам и указан удаленный формат; нужно проверить готовность работать с офисами/станциями и руководить помощником.","interview":["Как в ABS GROUP считали заявку, звонок и продажу по Bitrix24/Roistat?","Что бы сделал с карточками станций и SERM за первый месяц?","Готов ли к офисному/гибридному формату и управлению помощником?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 134.","Город: Москва; зарплатное ожидание: 150 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может усилить контур “сайт + карты/репутация + CRM + отчеты” и быстро дать порядок по источникам, заявкам, звонкам и эффективности каналов."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","roi"]},{"key":"analytics","values":["roistat","метрика","analytics","bi"]},{"key":"crm","values":["crm","bitrix","воронк"]},{"key":"local","values":["авто","сервис"]},{"key":"sites","values":["сайт","лендинг","посадоч","seo"]},{"key":"management","values":["руковод","директор","head","команд"]},{"key":"ai","values":["ai"]}],"risks":["кандидат добавлен из свежего среза 12.05.2026, нужна ручная проверка на интервью"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p15","rank":15,"city":"Новосибирск","title":"НСК кандидат #15","fitScore":134,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Маркетолог-аналитик с очень релевантной болью: аудит веб-аналитики, карта целей, Битрикс24, Roistat и исправление потери лидов.","opportunity":"Может быстро навести порядок в данных: цели, источники, CRM-передача, отчеты, email-трекинг и контроль “куда пропадают обращения”.","risk":"Зарплата 60 000 руб. и title “интернет-маркетолог” могут означать уровень не руководителя, а аналитика/специалиста; рассматривать как сильный аналитический резерв.","interview":["Как нашли потерю лидов в Битрикс24?","Как строили карту целей и сквозную аналитику?","Готовы ли управлять помощником и подрядчиками?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 134.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быстро навести порядок в данных: цели, источники, CRM-передача, отчеты, email-трекинг и контроль “куда пропадают обращения”."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","roi"]},{"key":"analytics","values":["roistat","сквозн","метрика","analytics"]},{"key":"crm","values":["crm","bitrix","битрикс"]},{"key":"local","values":["авто","сервис"]},{"key":"sites","values":["сайт","seo","конверси","ux"]},{"key":"management","values":["руковод","команд","подрядчик","отдел"]},{"key":"ai","values":["ai","автоматизац","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p16","rank":16,"city":"Новосибирск","title":"НСК кандидат #16","fitScore":130,"salary":"не указана","freshness":"Обновлено 12.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Опытный руководитель маркетинга в retail/B2B: команда, сайты, Битрикс24, Roistat, коллтрекинг, сегментация базы, сервисная программа и рост конверсии сайта.","opportunity":"Может быть полезна для наведения порядка в управлении задачами, подрядчиками, сайтами, CRM, коллтрекингом и оценкой каналов.","risk":"Опыт широкий и местами более классический; нужно проверить текущую силу в Директе/VK/Авито/картах и AI-агентах.","interview":["Как внедряли коллтрекинг и что он показал?","Как добились роста конверсии сайта в 2 раза?","Какой AI-агент внедрили бы для отчетности или мониторинга?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 130.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быть полезна для наведения порядка в управлении задачами, подрядчиками, сайтами, CRM, коллтрекингом и оценкой каналов."],"signals":[{"key":"performance","values":["директ","контекст","roi","таргет"]},{"key":"analytics","values":["roistat","сквозн","отчет","roi"]},{"key":"crm","values":["битрикс","воронк"]},{"key":"local","values":["отзыв","авто","сервис"]},{"key":"sites","values":["сайт","seo","конверси"]},{"key":"management","values":["руковод","директор","head","cmo"]},{"key":"ai","values":["агент"]}],"risks":["кандидат добавлен во второй круг НСК после открытия полного резюме 12.05.2026"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p17","rank":17,"city":"Новосибирск","title":"НСК кандидат #17","fitScore":126,"salary":"не указана","freshness":"Обновлено 07.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Директор по маркетингу локального сервиса/retail: дашборды, прогнозирование, ROI, отзывы, сайты, воронка и карта клиента.","opportunity":"Может помочь с операционной системой маркетинга: отчеты, прогноз, отзывы, сайты, снижение лидов и регулярный контроль задач.","risk":"Нужно проверить реальность метрик и глубину performance-инструментов; часть формулировок выглядит обобщенно.","interview":["Покажите пример дашборда и прогноза.","Какие действия снизили негативные отзывы на 24%?","Как считали ROI и стоимость лида?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 126.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может помочь с операционной системой маркетинга: отчеты, прогноз, отзывы, сайты, снижение лидов и регулярный контроль задач."],"signals":[{"key":"performance","values":["директ","контекст","roi","таргет"]},{"key":"analytics","values":["сквозн","bi","отчет","roi"]},{"key":"crm","values":["воронк"]},{"key":"local","values":["2гис","локальн","отзыв","авто"]},{"key":"sites","values":["сайт","конверси"]},{"key":"management","values":["руковод","директор","подрядчик","отдел"]},{"key":"ai","values":["автоматизац"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p18","rank":18,"city":"Новосибирск","title":"НСК кандидат #18","fitScore":124,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Сильный hands-on performance/SEO аналитик: ТМФ, Директ, SEO, Метрика/GA/GTM, WordPress/Bitrix, дашборды, снижение CPL и рост конверсий.","opportunity":"Может быстро усилить рекламную и аналитическую дисциплину: кампании, цели, посадочные, SEO, отчеты и контроль эффективности каналов.","risk":"Больше похож на сильного исполнителя/ведущего специалиста; нужно проверить готовность руководить помощником и подрядчиками.","interview":["Покажите пример дашборда и KPI по рекламе.","Как снижали CPL и долю рекламных расходов?","Как будете ставить задачи помощнику и подрядчикам?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 124.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быстро усилить рекламную и аналитическую дисциплину: кампании, цели, посадочные, SEO, отчеты и контроль эффективности каналов."],"signals":[{"key":"performance","values":["директ","яндекс директ","контекст","лидогенерац"]},{"key":"analytics","values":["метрика","analytics","дашборд","bi"]},{"key":"crm","values":["bitrix","битрикс"]},{"key":"local","values":["2гис","авито","авто"]},{"key":"sites","values":["сайт","seo","конверси","bitrix"]},{"key":"management","values":["lead","команд","отдел","бюджет"]},{"key":"ai","values":["ai","автоматизац","агент"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p19","rank":19,"city":"Москва","title":"МСК кандидат #19","fitScore":123,"salary":"170 000 ₽","freshness":"Обновлено 12.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Новый / система + AI","why":"Системный директор по маркетингу с опытом IT/B2B2C, SaaS/Fintech, командой, подрядчиками, аналитикой, SEO, воронками и AI-агентами. Ожидание 170 000 руб. в вилке.","opportunity":"Может быть полезен для построения управленческого контура: план, воронка, отчетность, подрядчики, гипотезы, AI-автоматизация и регулярный контроль результата.","risk":"Меньше прямой локальной офлайн-сервисной специфики, чем у авто/медицинских кандидатов; нужно проверить интерес к физлицам, картам и станциям ТО.","interview":["Как бы перевела вашу систему в физлиц, карты и станции ТО?","Какие отчеты настроила бы в первую неделю?","Какие AI-агенты реально использовала, а не просто упоминала?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 123.","Город: Москва; зарплатное ожидание: 170 000 ₽."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может быть полезен для построения управленческого контура: план, воронка, отчетность, подрядчики, гипотезы, AI-автоматизация и регулярный контроль результата."],"signals":[{"key":"performance","values":["директ","cpa","roi","cac"]},{"key":"analytics","values":["bi","отчет","roi"]},{"key":"crm","values":["email","воронк"]},{"key":"local","values":["локальн","отзыв","авто","сервис"]},{"key":"sites","values":["сайт","seo","конверси"]},{"key":"management","values":["руковод","директор","head","cmo"]},{"key":"ai","values":["ai","агент"]}],"risks":["кандидат добавлен из свежего среза 12.05.2026, нужна ручная проверка на интервью"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""},{"id":"p20","rank":20,"city":"Новосибирск","title":"НСК кандидат #20","fitScore":107,"salary":"не указана","freshness":"Обновлено 08.05.2026","age":"","gender":"","photo":"","experience":"Полное резюме проверено; идентифицирующие детали скрыты в публичной версии.","url":"","label":"Второй круг НСК","why":"Региональный маркетолог Клиники Эксперт Новосибирск: медицинская услуга, стратегия, digital, офлайн, PR, соцсети, контент и работа с врачами.","opportunity":"Может дать Экосмотру практики локальной медицинской услуги: доверие, запись, контент, репутация, эксперты и конвертация спроса в визит.","risk":"Нужно проверить performance-часть глубже: Директ/VK/Авито/карты, сквозную аналитику и ROI.","interview":["Какие каналы давали записи в клинике?","Как считали эффективность digital/offline/PR?","Как бы адаптировали медицину под техосмотр физлиц?"],"metrics":["Резюме прошло полный просмотр, не только карточку выдачи.","Fit-рейтинг: 107.","Город: Новосибирск; зарплатное ожидание: не указана."],"experienceHighlights":["Подробный опыт, работодатели, возраст, фото и HH-ссылка скрыты для безопасной публичной публикации.","Внутренняя версия с полными данными остается в локальном проекте.","Может дать Экосмотру практики локальной медицинской услуги: доверие, запись, контент, репутация, эксперты и конвертация спроса в визит."],"signals":[{"key":"performance","values":["директ","romi","таргет","vk"]},{"key":"analytics","values":["отчет","romi"]},{"key":"crm","values":["воронк"]},{"key":"local","values":["2гис","гео","отзыв","клиник"]},{"key":"sites","values":["сайт","посадоч","seo","конверси"]},{"key":"management","values":["руковод","подрядчик","отдел","бюджет"]},{"key":"ai","values":["ai"]}],"risks":["Существенных рисков по резюме не видно"],"summary":"Публичная обезличенная карточка. Полный профиль доступен только во внутренней версии.","skills":""}]};
+    let activeTab = 'priority';
+    let activeCity = 'all';
+    let query = '';
+
+    const labels = {
+      performance: 'Perf',
+      analytics: 'Analytics',
+      crm: 'CRM',
+      local: 'Geo/B2C',
+      sites: 'Site',
+      management: 'Lead',
+      ai: 'AI'
+    };
+
+    function icon(name) {
+      return '<svg class="svgicon"><use href="#' + name + '"></use></svg>';
+    }
+
+    function initials(candidate) {
+      return candidate.city === 'Новосибирск' ? 'НСК' : 'МСК';
+    }
+
+    function candidatePhoto(candidate) {
+      if (candidate.photo) {
+        return '<img src="' + candidate.photo + '" alt="Фото кандидата" referrerpolicy="no-referrer" onerror="this.parentElement.textContent=\'' + initials(candidate) + '\'">';
+      }
+      return initials(candidate);
+    }
+
+    function haystack(candidate) {
+      return [
+        candidate.city, candidate.title, candidate.salary, candidate.label, candidate.why,
+        candidate.opportunity, candidate.risk, candidate.experience, candidate.summary,
+        candidate.skills, candidate.metrics.join(' '), candidate.experienceHighlights.join(' '),
+        candidate.signals.map(s => s.key + ' ' + s.values.join(' ')).join(' ')
+      ].join(' ').toLowerCase();
+    }
+
+    function filtered(list) {
+      return list.filter(candidate => {
+        const cityOk = activeCity === 'all' || candidate.city === activeCity;
+        const qOk = !query || haystack(candidate).includes(query.toLowerCase());
+        return cityOk && qOk;
+      });
+    }
+
+    function candidateCard(candidate) {
+      const width = Math.max(8, Math.min(100, Math.round(candidate.fitScore / 1.6)));
+      const signals = candidate.signals.map(signal => {
+        return '<div class="signal"><strong>' + (labels[signal.key] || signal.key) + '</strong><span>' + signal.values.join(', ') + '</span></div>';
+      }).join('');
+      const metrics = candidate.metrics.length
+        ? '<ul>' + candidate.metrics.slice(0, 3).map(item => '<li>' + item + '</li>').join('') + '</ul>'
+        : '<p>Явные метрики в резюме не выделены.</p>';
+      const experience = candidate.experienceHighlights.length
+        ? '<ul class="experience-list">' + candidate.experienceHighlights.map(item => '<li>' + item + '</li>').join('') + '</ul>'
+        : '<p>' + candidate.summary + '</p>';
+      return '<article class="candidate" data-city="' + candidate.city + '">' +
+        '<div class="candidate-header">' +
+          '<div class="avatar">' + candidatePhoto(candidate) + '</div>' +
+          '<div><h3>' + candidate.title + '</h3><div class="meta">' +
+            '<span class="pill">' + candidate.label + '</span>' +
+            '<span>' + candidate.city + '</span><span>' + (candidate.age || 'возраст не указан') + '</span><span>' + candidate.salary + '</span><span>' + candidate.freshness + '</span>' +
+          '</div></div>' +
+          '<div class="score"><strong>' + candidate.fitScore + '</strong><span>fit</span><div class="scorebar" style="--w:' + width + '%"><i></i></div></div>' +
+        '</div>' +
+        '<div class="candidate-body">' +
+          '<div class="two">' +
+            '<div class="panel"><h4>Почему он</h4><p>' + candidate.why + '</p></div>' +
+            '<div class="panel"><h4>Возможность для нас</h4><p>' + candidate.opportunity + '</p></div>' +
+          '</div>' +
+          '<div class="signals">' + signals + '</div>' +
+          '<div class="two">' +
+            '<div class="panel"><h4>Метрики и достижения</h4>' + metrics + '</div>' +
+            '<div class="panel"><h4>Риски и проверка</h4><p>' + candidate.risk + '</p></div>' +
+          '</div>' +
+          '<div class="panel experience-panel"><h4>Опыт, полезный для Экосмотра</h4>' + experience + '</div>' +
+          '<div class="panel"><h4>Вопросы на скрининг</h4><ul>' + candidate.interview.map(item => '<li>' + item + '</li>').join('') + '</ul></div>' +
+          '<div class="candidate-actions">' +
+            '<button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText(\'' + candidate.url + '\')">Ссылка</button>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    }
+
+    function renderCards(target, empty, list) {
+      const items = filtered(list);
+      document.getElementById(target).innerHTML = items.map(candidateCard).join('');
+      document.getElementById(empty).style.display = items.length ? 'none' : 'block';
+    }
+
+    function renderCompare() {
+      const items = filtered(DATA.priorityCandidates);
+      const rows = items.map((candidate, index) => {
+        const signals = candidate.signals.map(s => (labels[s.key] || s.key) + ': ' + s.values.slice(0, 3).join(', ')).join('<br>');
+        return '<tr><td class="rank">' + (index + 1) + '</td><td><strong>' + candidate.title + '</strong><br>' + candidate.city + '</td><td>' + candidate.fitScore + '</td><td>' + candidate.salary + '</td><td>' + signals + '</td><td>' + candidate.opportunity + '</td><td>' + candidate.risk + '</td><td><a target="_blank" href="' + candidate.url + '">HH</a></td></tr>';
+      }).join('');
+      document.getElementById('compareTable').innerHTML = '<thead><tr><th>#</th><th>Кандидат</th><th>Fit</th><th>ЗП</th><th>Сигналы</th><th>Возможность</th><th>Риск</th><th>HH</th></tr></thead><tbody>' + rows + '</tbody>';
+    }
+
+    function render() {
+      renderCards('priorityGrid', 'priorityEmpty', DATA.priorityCandidates);
+      renderCompare();
+    }
+
+    document.querySelectorAll('.tab').forEach(button => {
+      button.addEventListener('click', () => {
+        activeTab = button.dataset.tab;
+        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === button));
+        document.querySelectorAll('.section').forEach(section => section.classList.toggle('active', section.id === activeTab));
+      });
+    });
+    document.querySelectorAll('.city').forEach(button => {
+      button.addEventListener('click', () => {
+        activeCity = button.dataset.city;
+        document.querySelectorAll('.city').forEach(b => b.classList.toggle('active', b === button));
+        render();
+      });
+    });
+    document.getElementById('search').addEventListener('input', event => {
+      query = event.target.value.trim();
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>
